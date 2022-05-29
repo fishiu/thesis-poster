@@ -22,9 +22,9 @@
 %   PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
 %----------------------------------------------------------------------------------------
 
-\documentclass[final,hyperref={pdfpagelabels=false}]{beamer}
+\documentclass[final,hyperref={pdfpagelabels=false}]{ctexbeamer}
 
-\usepackage[orientation=landscape,size=a0,scale=1.3]{beamerposter} % Use the beamerposter package for laying out the poster with a portrait orientation and an a0 paper size
+\usepackage[orientation=portrait,size=a0,scale=1.5]{beamerposter} % Use the beamerposter package for laying out the poster with a portrait orientation and an a0 paper size
 
 \usetheme{Oxford}
 
@@ -33,10 +33,13 @@
 \usepackage{amsmath,amsthm,amssymb,latexsym} % For including math equations, theorems, symbols, etc
 \usepackage[document]{ragged2e}
 \usepackage{times}\usefonttheme{professionalfonts}  % Uncomment to use Times as the main font
-\usefonttheme[onlymath]{serif} % Uncomment to use a Serif font within math environments
+% \usefonttheme[onlymath]{serif} % Uncomment to use a Serif font within math environments
 %\boldmath % Use bold for everything within the math environment
 \usepackage{booktabs} % Top and bottom rules for tables
 \usepackage{microtype}
+
+\setCJKsansfont{STKaiti}
+% \setsansfont{Times New Roman}
 
 \usecaptiontemplate{\small\structure{\insertcaptionname~\insertcaptionnumber: }\insertcaption} % A fix for figure numbering
 
@@ -51,10 +54,9 @@
 %----------------------------------------------------------------------------------------
 %   TITLE SECTION 
 %----------------------------------------------------------------------------------------
-\title{\Huge Oxford\\ Beamer Poster} % Poster title
-\author{Author 1, Author 2, Author 3}
-\institute{Department of Engineering Science, University of Oxford\\\vspace{4mm}
-\texttt{\{author1,author2,author3\}@robots.ox.ac.uk}}
+\title{基于表格及其上下文的对比学习预训练 \\\vspace{6mm} Context-based Table Pre-training with Contrastive Learning} % Poster title
+\author{金笑缘 \quad 指导老师：化柏林}
+\institute{北京大学信息管理系 \quad 大数据管理与应用专业}
 
 %----------------------------------------------------------------------------------------
 %   FOOTER TEXT
@@ -67,6 +69,7 @@
 
 \begin{document}
 \addtobeamertemplate{block end}{}{\vspace*{2ex}} % White space under blocks
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
 
 \begin{frame}[t] % The whole poster is enclosed in one beamer frame
 
@@ -80,20 +83,54 @@
 
   \begin{column}{.3\textwidth} % 1st column
 
-    \vspace{\shrink}          
-    \begin{block}{Overview}
+    \vspace{\shrink}
+    \begin{block}{研究简介}
+      %目的/意义
+      表格数据是除了图像、文本等数据之外的另一种重要的数据格式。相比普通文本和数字，表格数据由于独特的二维对齐网格组织形式以及丰富的格式特征，具有更高的信息密度。已有的表格预训练模型主要基于表格文本的语言表示模型，没有充分利用表格的上下文信息，本研究尝试引入表格上下文信息用于加强表格表示模型，使用配对的表格-标题样本对作为正例样本进行对比学习中间预训练，以获得更好的表格特征表示用于下游任务。
+
+      \vspace{4mm}
+      本研究构造了基于科技文献文献LaTeX源代码的表格数据集ar5iv，并使用自然语言方法对表格配对的标题进行数据增强。同时本研究提出了TabCL（\textbf{Tab}el \textbf{C}ontrastive \textbf{L}earning）模型，使用TAPAS表格编码模型和BERT文本编码模型获得两个模态的特征向量，并计算多正样本对比学习损失函数。获得预训练模型后在表格问答任务上进行微调，用于比较对比学习模型的性能。
+      
+      \vspace{4mm}
+      本研究的主要贡献为：
+      \vspace{4mm}
       \begin{itemize}
-          \item Overview 1
-          \item Overview 2
-          \item Overview 3
-          \item Overview 4
+          \item 提出表格作为一种独立模态的观点；
+          \item 抓取ar5iv论文数据库的HTML源代码并抽取表格和标题，为表格领域增加了新的科技文献表格数据源；
+          \item 创新地将多模态对比学习方法应用到表格-文本的多模态协同表示学习；
+          \item 对标题文本进行了正样本数据增强实验，分析了不同增强方法对对比学习模型性能的影响。
       \end{itemize}
+
+    \end{block}
+    
+    \vspace{8mm}
+    \begin{center}
+      \includegraphics[width=\columnwidth]{/Users/leverest/Documents/repos/latex/pkuthss_bs/img/flow/clmodel-cn.drawio.pdf}
+      % \caption{TabCL模型结构图}
+    \end{center}
+    \vspace{8mm}
+
+    \begin{block}{观点：表格也是一种模态}
+      模态（Modality）是一种广义的信息来源概念，可以从人类感觉、信息媒介、传感器等多种角度对模态进行分类。
+
+      \vspace{4mm}
+      目前有关表格的研究都是在自然语言处理即文本数据模态的框架下开展，近几年的研究方法大都建立在基于Transformer结构的BERT语言表示模型的基础上。但是事实上，根据表格的定义，本研究认为表格数据应当作为一种新的模态来研究：
+      
+      \vspace{4mm}
+      \begin{enumerate}
+        \item 人类感觉角度：人类对表格的识别建立在视觉的基础上；
+        \item 信息媒介角度：复杂、完备的表格数据往往依赖Excel、XML、LaTeX等非纯文本表示；
+        \item 传感器角度：表格数据不同于纯文本，需要专门的解析器；
+        \item 数据组织形式角度：表格具有基于网格的二维对齐属性，可以灵活合并，单元格内容丰富且具有视觉特征。
+      \end{enumerate}
     \end{block}
 
-    \begin{block}{Another block}
-      Block text \cite{le-2016-inference-compilation}...
-    \end{block}
-  \end{column} % End of the 1st column
+    % \begin{block}{模型}
+    %   \begin{center}
+    %     \includegraphics[width=0.9\columnwidth]{/Users/leverest/Documents/repos/latex/pkuthss_bs/img/flow/clmodel-cn.drawio.pdf}
+    %   \end{center}
+    % \end{block}
+  \end{column}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Column 2
@@ -103,15 +140,67 @@
 
   \begin{column}{.3\textwidth} % 2nd column
     \vspace{\shrink}
-    \begin{block}{Method}
-      \textbf{Method details.} We formulate... $\mathcal S = \{s_1, s_2, s_3, s_4, s_5, s_6 \}$
+    \begin{block}{模型方法：表格与文本编码器}
+      本研究提出TabCL预训练模型，如左图所示：该模型为双塔编码器结构，基于End-to-End的对比学习框架，使用本文提出的多正样本对比学习损失函数。
+      
+      \vspace{4mm}
+      为了获得更大的训练BatchSize，本研究使用两个“小编码器”节约显存。使用TAPAS-small表格编码器获得表格[CLS]嵌入表示向量，DistilBERT编码器获得表格上下文的[CLS]嵌入表示向量。DistilBERT模型仅用66M参数对BERT实现了进行蒸馏压缩，TAPAS-small是Google 2019年提出的弱监督表格问答预训练模型TAPAS的小参数版本。
+    \end{block}
+    
+    \begin{block}{模型方法：多正样本对比学习损失函数}
 
-      Image example:
-      \begin{center}
-        \includegraphics[width=0.9\columnwidth]{ox_brand_cmyk_rev}
-      \end{center}
+      InfoNCE是经典的对比学习损失函数，它使用余弦相似度$sim(p, q) = \frac{p \cdot q}{\lVert p\rVert \lVert q\rVert}$来衡量样本相似性。在每个Batch中，每个样本$q$的损失$\mathcal{L}_{q}$如公式\ref{eq:infonce}所示，其中$k_i$是$k$的In-Batch负样本，$k_+$是$k$的正样本。
+      \begin{footnotesize}
+      \begin{equation}
+          \label{eq:infonce}
+          \mathcal{L}_{q}=-\log \dfrac{\exp \left(q \cdot k_{+} / \tau\right)}{\sum_{i=0}^{K} \exp \left(q \cdot k_{i} / \tau\right)}
+      \end{equation}
+      \end{footnotesize}
+
+      \begin{figure}[htb]
+        \begin{minipage}{0.5\textwidth}
+          \centering
+          \includegraphics[height=10cm]{/Users/leverest/Documents/repos/latex/pkuthss_bs/img/flow/cl.drawio.png}
+          \caption{\scriptsize 图1: 经典对比学习损失}
+          \label{infonce}
+        \end{minipage}\hfill
+        \begin{minipage}{0.5\textwidth}
+          \centering
+          \includegraphics[height=10cm]{/Users/leverest/Documents/repos/latex/pkuthss_bs/img/flow/cl-mul.drawio.png}
+          \caption{\scriptsize 图2: 多正样本对比学习损失}
+          \label{mul-infonce}
+        \end{minipage}
+      \end{figure}
+
+      \vspace{4mm}
+      相比传统的对比学习（图\ref{infonce}），本研究（图\ref{mul-infonce}）中每个长度为$N$的Batch由两种模态的数据构成：$N$个表格table（记为$t_i$）和$N$个上下文文本context（记为$c_j$），$t_i$和$c_i$为正样本对，$t_i$和$c_j$为负样本对（$i \neq j$）。总损失函数为$\mathcal{L}_{no-aug}$。
+      \begin{footnotesize}
+      \begin{equation}
+          \label{eq:loss_noaug}
+          \mathcal{L}_{no-aug} = \sum_{i=0}^{N-1} -\log \dfrac{\exp \left(t_i \cdot c_i / \tau\right)}{\sum_{j=0}^{N-1} \exp \left(t_j \cdot c_{j} / \tau\right)}
+      \end{equation}
+      \end{footnotesize}
+
+      \vspace{4mm}
+      在对标题增强时，可以将问题理解为上下文的多分类即可避免损失函数的计算问题，即判断上下文究竟属于哪个表格。使用交叉熵计算损失$\mathcal{L}_{aug}$，其中$\mathbf{C}$是Batch中所有的上下文向量构成的$N_{context} \times Dim$矩阵，$\mathbf{T}$是Batch中所有的表格向量构成的$N_{table} \times Dim$矩阵（$N_{table} \leq N_{context}$）。
+      \begin{footnotesize}
+      \begin{equation}
+          \label{eq:loss_aug}
+          \mathcal{L}_{aug} = f \left (\mathbf{C} \times \mathbf{T}^\top, label \right )
+      \end{equation}
+      \end{footnotesize}
+      \vspace{-18mm}
     \end{block}
 
+    \begin{block}{模型方法：数据增强}
+      对比学习最重要的技术是使用数据增强技术制造正样本，本研究采用python第三方包nlpaug对表格标题进行词粒度的增强，经过筛选使用如下三种方法。
+      \begin{itemize}
+          % 这个原理我其实不是很懂
+          \item Synonym（近义词）方法使用WordNET或PPDB等词典库来寻找近义词，通过替换来实现数据增强，速度较快；
+          \item WordEmbs（词向量）方法采用GloVe等成熟的词向量模型来寻找最适合替换或插入的词语；
+          \item BackTranslation（回译）方法指将原语言翻译为一种新的语种，再翻译回原语种获得增强后的问题，需要使用两个翻译模型，所以速度较慢但效果较好。
+      \end{itemize}
+    \end{block}
   \end{column} % End of the 2nd column
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -121,17 +210,64 @@
   \begin{column}{.02\textwidth}\end{column} % Empty spacer column
 
   \begin{column}{.3\textwidth} % 3rd column
+    \vspace{\shrink}
 
-    \begin{block}{Results}
-      Results...
+    \begin{block}{实验与数据}
+      本实验共使用三个数据集，两个表格-标题预训练数据集ar5iv和ToTTo，一个下游任务SQA问答数据集。其中ar5iv表格数据集由本文提出，通过LaTeX源码解析出arXiv文献表格，数据生成流程如下图所示。
+      
+      \vspace{4mm}
+      \begin{center}
+        \includegraphics[width=\columnwidth]{/Users/leverest/Documents/repos/latex/pkuthss_bs/img/flow/arxiv_flow.drawio.png}
+        % \caption{TabCL模型结构图}
+      \end{center}
+      \vspace{4mm}
+
+      实验主要由数据预处理、对比学习预训练、下游任务微调共三个部分构成。预处理部分主要包括生成、清洗表格标题，并进行数据增强。ToTTo数据集采用词向量、回译、近义词替换三种增强方式；因专有名词和公式过多，ar5iv数据集暂时只采用近义词替换增强方式。预训练部分共包括7个模型，5个基于ToTTo数据集的模型，和2个基于ar5iv数据集的模型。下游任务微调用于测量上述每个预训练模型以及TAPAS-small原模型在SQA上的性能。
     \end{block}
 
-    \begin{block}{References}
-      \nocite{*} % Insert publications even if they are not cited in the poster
-      \linespread{0.928}\selectfont
-      \footnotesize{\bibliographystyle{unsrt}
-      \bibliography{oxford_poster}}
+    \begin{block}{研究结果}
+      对本实验预训练的7个模型以及TAPAS发布的TAPAS-small模型在SQA任务上分别进行100个epoch的微调并选出其中最高的验证集准确率，计算出对应的测试集准确率进行模型性能的比较，微调结果如表所示。
+      
+      \vspace{4mm}
+      \begin{table}[h]
+          \small
+          \centering
+          \begin{tabular}{lcccl}
+              \toprule[1.5pt]
+              预训练模型 & 验证集准确率 & 测试集准确率\\
+              \midrule[1pt]
+              TAPAS-small & 0.6115 & \textbf{0.6295}\\
+              \midrule[1pt]
+              ToTTo-Trans & 0.6071 & \textbf{0.6275}\\
+              ToTTo-Synonym & 0.5991 & 0.6265\\
+              ToTTo-NoAug & 0.5885 & 0.6212\\
+              ToTTo-AllAug & 0.5969 & 0.6182\\
+              ToTTo-Embed & 0.5960 & 0.6162\\
+              \midrule[1pt]
+              ar5iv-Synonym & 0.5983 & 0.6149\\
+              ar5iv-NoAug & 0.6088 & \textbf{0.6225}\\
+              \bottomrule[1.5pt]
+          \end{tabular}
+      \end{table}
+    
+      \vspace{4mm}
+      基于ToTTo的五个模型中，使用回译数据增强的模型性能最好，使用词向量的模型性能最差且弱于不使用数据增强的模型；ar5iv数据集上使用近义词数据增强也产生了副作用；由于训练不充分，所有对比学习均没有超过不使用对比学习的模型。
     \end{block}
+
+
+    \begin{block}{结论与讨论}
+    本研究主要得出以下结论：
+    \vspace{4mm}
+    \begin{itemize}
+      \item 成功搭建了表格多模态对比学习预训练模型框架，并设计了多正样本对比损失函数；
+      \item 由于数据量、批大小不足，导致模型在相对空间尚未定型，因此对比学习没有给模型带来提升；
+      \item 回译增强方法可能效果最显著，不同数据集适合不同的增强方法不应该简单叠加，且数据量大增强效果更好。
+    \end{itemize}
+
+    \vspace{4mm}
+    在未来的研究中，首先可以探索新的下游任务并充分利用表格的整体性；其次应当扩充预训练数据集并实现更充分的调参；此外可以探索协同表示学习对另一个模态模型的影响，如是否能提升通用语言模型的效果。
+    \vspace{4mm}
+  \end{block}
 
   \end{column} % End of the 3rd column
 
